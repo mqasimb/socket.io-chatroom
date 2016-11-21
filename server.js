@@ -21,9 +21,9 @@ io.on('connection', function(socket) {
      socket.broadcast.emit('message', message);
    });
    
-   socket.on('typing', function(typing) {
+   socket.on('typing', function(typingbool) {
       console.log("User is typing");
-      socket.broadcast.emit('typing', typing);
+      socket.broadcast.emit('typing', typingbool);
    });
    socket.on('disconnect', function() {
       console.log('User disconnected');
