@@ -8,18 +8,27 @@ var io = socket_io(server);
 
 app.use(express.static('public'));
 
+var connectedUsers = 0;
+
 io.on('connection', function(socket) {
    console.log('Connection Started');
-   socket.broadcast.emit('connection', "New User Connected");
+   connectedUsers++;
+   socket.broadcast.emit('connection');
+   io.emit('counter', connectedUsers);
    
    socket.on('message', function(message) {
      console.log("Message received"); 
      socket.broadcast.emit('message', message);
    });
    
+   socket.on('typing', function(typing) {
+      console.log("User is typing");
+      socket.broadcast.emit('typing', typing);
+   });
    socket.on('disconnect', function() {
       console.log('User disconnected');
-      socket.broadcast.emit('disconnect', "A User Has Disconnected");
+      connectedUsers--;
+      io.emit('disconnect', null);
    });
 });
 
