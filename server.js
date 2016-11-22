@@ -12,22 +12,23 @@ var connectedUsers = 0;
 
 io.on('connection', function(socket) {
    console.log('Connection Started');
+   console.log(socket.id);
    connectedUsers++;
    socket.broadcast.emit('connection');
    io.emit('counter', connectedUsers);
    
    socket.on('message', function(message) {
-     console.log("Message received"); 
      socket.broadcast.emit('message', message);
    });
    
    socket.on('typing', function(typingbool) {
-      console.log("User is typing");
       socket.broadcast.emit('typing', typingbool);
    });
+   
    socket.on('disconnect', function() {
       console.log('User disconnected');
       connectedUsers--;
+      console.log(socket.id);
       io.emit('disconnect', null);
    });
 });
